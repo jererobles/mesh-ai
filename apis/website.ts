@@ -1,3 +1,5 @@
+// FIXME: handle errors more gracefully maybe instead of bubbling them to the main loop
+
 import { NodeHtmlMarkdown, TranslatorConfigObject } from "node-html-markdown";
 import DOMParser from "dom-parser";
 
