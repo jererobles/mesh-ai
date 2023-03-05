@@ -13,7 +13,8 @@ https://user-images.githubusercontent.com/9132875/222984291-b5baa390-158f-4770-a
 Set your OpenAI API Key in `.env`
 
 ```bash
-git clone
+git clone https://github.com/jererobles/mesh-ai.git
+cd mesh-ai
 echo "<your_key>" > .env
 ```
 
