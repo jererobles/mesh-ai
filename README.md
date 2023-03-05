@@ -54,4 +54,20 @@ Any backend system that the AI may decide to call. We avoid implementing too muc
 
 Representing a model from OpenAI — an API key is required to use it but this may change in the future if we decide to support offline usage. DaVinci and ChatGPT-3.5 are the ones implemented so far but only the latter is actually used.
 
+## Caveats
+
+- code needs more time than I can dedicate in a weekend meaning lots of parts need to be refactored
+- although Personas support _some_ limited logic using the functions mentioned above, the intention is to craft the seed messages in order to produce the desired output — with the one exception of the "final" response which may be contain special keywords injected in the response that the stream parser can pick up on in order to decide if a web search is required
+- sometimes the model's limitations leak through for example in the demo video the identified topic refers to a strike that happened in 2021 even though the model correctly identified that it lacked recent enough data to reply and therefore chose to do a web search — which correctly provided information about the ongoing strike in 2023
+
+## To Do
+
+[x] initial PoC
+[x] silly blog post
+[ ] refactoring (??)
+[ ] support more search engines such as DDG
+[ ] define more Personas (categorizer could be use as a previous step for this)
+
+---
+
 This project was created using `bun init` in bun v0.5.7. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
