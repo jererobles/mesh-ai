@@ -44,7 +44,7 @@ This section in WIP.
 
 Just like no single human has the knowledge or is trained to do every task, it is unreasonable to expect one model with a fixed set of parameters to handle every user input.
 
-A Persona is just an instance of GPT3.5 with a predetermined set of parameters and optionally a conversation seed, a `transformer` function and a `validation` function. See [other/personas.ts](https://github.com/jererobles/mesh-ai/blob/main/other/personas.ts) for more information.
+A Persona is just an instance of GPT3.5 with a predetermined set of parameters and more importantly, a conversation seed that defines the capabilities and personality of the agent. It is also possible, although optional, to set a `transformer` function and a `validation` function. See [other/personas.ts](https://github.com/jererobles/mesh-ai/blob/main/other/personas.ts) for more information.
 
 ### API
 
