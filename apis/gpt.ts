@@ -1,3 +1,5 @@
+// FIXME: this file does too much stuff
+
 import * as https from "node:https";
 import { SEARCH_CUE } from "../models/gpt-3.5.js";
 import { printDelayed } from "../other/printDelayed.js";
