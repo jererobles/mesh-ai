@@ -4,12 +4,6 @@ import * as https from "node:https";
 import { SEARCH_CUE } from "../models/gpt-3.5.js";
 import { printDelayed } from "../other/printDelayed.js";
 
-export type Role = "system" | "user" | "assistant";
-export type Message = {
-  role: Role;
-  content: string;
-};
-
 // promise type holding the full text from the response and another promise that resolves when the response is done printing
 type GptResponsePromise = {
   text: string;

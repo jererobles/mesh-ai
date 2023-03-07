@@ -1,20 +1,11 @@
-import gpt, { Message } from "../apis/gpt.js";
-import { Persona } from "../other/personas.js";
-
-export type GptParams = {
-  max_tokens: number;
-  temperature: number;
-  top_p: number;
-  frequency_penalty: number;
-  presence_penalty: number;
-  model: string;
-  stream: boolean;
-};
+import gpt from "../apis/gpt.js";
+import Persona from "../personas/types.js";
+import { History, Role } from "./types.js";
 
 export const SEARCH_CUE = "##BAZINGA##";
 
-class GPT_3_5 {
-  private history: Message[] = [];
+export default class Chat {
+  private history: History = [];
   private persona: Persona;
   private truncateHistoryLength: number;
 
@@ -23,14 +14,14 @@ class GPT_3_5 {
     this.truncateHistoryLength = truncateHistoryLength;
   }
 
-  async gpt(prompt: string, printDelay?: number) {
+  async send(prompt: string, printDelay?: number) {
     const body = {
       ...this.persona.gptParams,
       messages: [
         ...this.persona.seed,
         ...this.history,
         {
-          role: "user",
+          role: Role.user,
           content: prompt,
         },
       ],
@@ -47,11 +38,11 @@ class GPT_3_5 {
 
     this.history.push(
       {
-        role: "user",
+        role: Role.user,
         content: prompt,
       },
       {
-        role: "assistant",
+        role: Role.assistant,
         content: chat.text + "\n",
       }
     );
@@ -70,9 +61,7 @@ class GPT_3_5 {
   // get all the messages by the assistant from the history
   getAssistantMessages() {
     return this.history
-      .filter((m) => m.role === "assistant")
+      .filter((m) => m.role === Role.assistant)
       .map((m) => m.content);
   }
 }
-
-export default GPT_3_5;

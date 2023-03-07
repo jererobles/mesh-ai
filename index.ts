@@ -1,31 +1,32 @@
-import GPT_3_5, { SEARCH_CUE } from "./models/gpt-3.5.js";
-import {
-  ANALYZER,
-  CATEGORIZER,
-  RESPONDER,
-  SUMMARIZER,
-} from "./other/personas.js";
+import Chat, { SEARCH_CUE } from "./models/gpt-3.5.js";
+
 import { searchGoogle } from "./apis/google.js";
-import WebsiteSynthetizer from "./apis/website.js";
+import WebsiteToMarkdown, { WebsiteResult } from "./apis/website.js";
+
+import Summarizer from "./personas/summarizer.js";
+import Categorizer from "./personas/categorizer.js";
+import Analyzer from "./personas/analyzer.js";
+import Responder from "./personas/responder.js";
+import { GptResponse } from "./apis/gpt.js";
 
 /**
  * The main function of the program, there are countless edge cases that are not handled :P
  */
 const main = async () => {
-  const webSynth = new WebsiteSynthetizer();
+  const categorizer = new Chat(Categorizer); // not really used, just for show
+  const summarizer = new Chat(Summarizer);
+  const analyzer = new Chat(Analyzer);
+  const responder = new Chat(Responder);
 
-  const categorizer = new GPT_3_5(CATEGORIZER); // not really used, just for show
-  const summarizer = new GPT_3_5(SUMMARIZER);
-  const analyzer = new GPT_3_5(ANALYZER);
-  const responder = new GPT_3_5(RESPONDER);
+  const webToMd = new WebsiteToMarkdown();
 
   while (true) {
     const input = (prompt("[>]") || "") + "\n";
 
     await Promise.all([
-      categorizer.gpt(input, -1), // -1 to disable printing
-      summarizer.gpt(input, -1), // -1 to disable printing
-      analyzer.gpt(input, 1000), // 1000 to wait 1 second before printing
+      categorizer.send(input, -1), // -1 to disable printing
+      summarizer.send(input, -1), // -1 to disable printing
+      analyzer.send(input, 1000), // 1000 to wait 1 second before printing
     ]).then(async (results) => {
       const [category, summary, analysis] = results;
 
