@@ -37,17 +37,45 @@ const main = async () => {
           if (!summary.dropped)
             console.debug(`🔍 Searching the web for: ${summary.text}`);
 
-          const links = await searchGoogle(summary.text);
-          console.log("🔗 Found 10 sources:", links);
+          const searchResultLinks = await searchGoogle(summary.text);
+          console.log("🔗 Found 10 sources:", searchResultLinks);
 
-          // TODO: read more than one link
-          console.log("🤓 Reading...");
-          const parsedSite = await webSynth.call(links[1]);
+          // TODO: read more than a few links
+          console.log("📖 Fetching...");
+          await Promise.allSettled([
+            webToMd.fetch(searchResultLinks[0]),
+            webToMd.fetch(searchResultLinks[1]),
+            webToMd.fetch(searchResultLinks[2]),
+            webToMd.fetch(searchResultLinks[3]),
+            webToMd.fetch(searchResultLinks[4]),
+          ]).then(async (webResults) => {
+            // use Responder to parse the text, return a promise that resolves to the parsed text
+            const responsePromises: Promise<GptResponse>[] = [];
+            webResults.forEach((result) => {
+              // console.log(result);
+              if (result.status === "fulfilled") {
+                const webPrompt = `Use your knowledge and the following text to tell me about ${summary.text}:\n"""${result.value.content}"""\n`;
+                responsePromises.push(responder.send(webPrompt, -1));
+              }
+            });
 
-          // FIXME: in some occasions the token limit is exceeded and the error response is not handled
-          const webPrompt = `Use your knowledge and the following text to tell me about ${summary.text}:\n"""${parsedSite}"""\n`;
-          const response = await responder.gpt(webPrompt, 0);
-          await response.doneTyping;
+            console.log("🤓 Reading...");
+            await Promise.allSettled(responsePromises).then(
+              async (responses) => {
+                const gluedResponses = responses
+                  .map((response) => {
+                    if (response.status === "fulfilled") {
+                      return response.value.text;
+                    }
+                  })
+                  .join("\n");
+                const finalrompt = `Summarize the following text and make it less repetitive:\n"""${gluedResponses}"""\n`;
+                const b = await responder.send(gluedResponses, 0);
+                await b.doneTyping;
+              }
+            );
+            // FIXME: in some occasions the token limit is exceeded and the error response is not handled
+          });
         } else {
           console.error(analysis.text);
         }
