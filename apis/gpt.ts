@@ -5,7 +5,7 @@ import { SEARCH_CUE } from "../models/gpt-3.5.js";
 import { printDelayed } from "../other/printDelayed.js";
 
 // promise type holding the full text from the response and another promise that resolves when the response is done printing
-type GptResponsePromise = {
+export type GptResponse = {
   text: string;
   dropped: boolean;
   doneTyping: Promise<void>;
@@ -37,10 +37,7 @@ const getRequestHeaders = () => ({
   Authorization: "Bearer " + OPENAI_API_TOKEN,
 });
 
-const gpt = async (
-  payload: any,
-  printDelay = -1
-): Promise<GptResponsePromise> => {
+const gpt = async (payload: any, printDelay = -1): Promise<GptResponse> => {
   const printQueue: NodeJS.Timeout[] = [];
   const clearPrintQueue = () =>
     printQueue.forEach((timeout) => clearTimeout(timeout));
@@ -56,7 +53,7 @@ const gpt = async (
     );
 
   // construct promise that will resolve when the response is received
-  const promise = new Promise<GptResponsePromise>((resolve, reject) => {
+  const promise = new Promise<GptResponse>((resolve, reject) => {
     // construct promise that will resolve when the response is done printing
     let resolvePrintingPromise: () => void;
     const printingDone = new Promise<void>(
