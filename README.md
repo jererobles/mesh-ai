@@ -64,7 +64,9 @@ Representing a model from OpenAI — an API key is required to use it but this m
 - [x] silly blog post
 - [ ] refactoring (??)
 - [ ] support more search engines such as DDG
-- [ ] define more Personas (categorizer could be use as a previous step for this)
+- [ ] image and video search
+- [ ] define more Personas
+  - [ ] map Personas to topics to answer in different voices or further refine results
 
 ---
 
