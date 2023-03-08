@@ -3,11 +3,11 @@ import Chat, { SEARCH_CUE } from "./models/gpt-3.5.js";
 import { searchGoogle } from "./apis/google.js";
 import WebsiteToMarkdown, { WebsiteResult } from "./apis/website.js";
 
-import Summarizer from "./personas/summarizer.js";
-import Categorizer from "./personas/categorizer.js";
-import Analyzer from "./personas/analyzer.js";
-import Responder from "./personas/responder.js";
-import { GptResponse } from "./apis/gpt.js";
+import Summarizer from "./personas/Summarizer.js";
+import Categorizer from "./personas/Categorizer.js";
+import Analyzer from "./personas/Analyzer.js";
+import Responder from "./personas/Responder.js";
+import UserAgent from "./personas/UserAgent.js";
 
 /**
  * The main function of the program, there are countless edge cases that are not handled :P
@@ -16,7 +16,7 @@ const main = async () => {
   const categorizer = new Chat(Categorizer); // not really used, just for show
   const summarizer = new Chat(Summarizer);
   const analyzer = new Chat(Analyzer);
-  const responder = new Chat(Responder);
+  // const responder = new Chat(Responder);
 
   const webToMd = new WebsiteToMarkdown();
 
@@ -41,39 +41,50 @@ const main = async () => {
           console.log("🔗 Found 10 sources:", searchResultLinks);
 
           // TODO: read more than a few links
-          console.log("📖 Fetching...");
+          console.log("📖 Reading...");
           await Promise.allSettled([
             webToMd.fetch(searchResultLinks[0]),
             webToMd.fetch(searchResultLinks[1]),
             webToMd.fetch(searchResultLinks[2]),
             webToMd.fetch(searchResultLinks[3]),
             webToMd.fetch(searchResultLinks[4]),
-          ]).then(async (webResults) => {
-            // use Responder to parse the text, return a promise that resolves to the parsed text
-            const responsePromises: Promise<GptResponse>[] = [];
-            webResults.forEach((result) => {
-              // console.log(result);
-              if (result.status === "fulfilled") {
-                const webPrompt = `Use your knowledge and the following text to tell me about ${summary.text}:\n"""${result.value.content}"""\n`;
-                responsePromises.push(responder.send(webPrompt, -1));
-              }
-            });
+          ]).then(async (websitesInMarkdown) => {
+            await Promise.allSettled(
+              websitesInMarkdown.flatMap((websiteResultPromise) => {
+                if (
+                  websiteResultPromise.status === "fulfilled" &&
+                  websiteResultPromise.value.content.trim() !== ""
+                ) {
+                  const websiteMarkdown = websiteResultPromise.value.content;
+                  const webPrompt = `Use the following text to tell me about ${summary.text}:\n"""${websiteMarkdown}"""\nDo not use your prior knowledge to answer, if you can't answer with the text I provided simply return an empty string.\n`;
+                  const responder = new Chat(UserAgent);
+                  return responder.send(webPrompt, -1);
+                } else {
+                  return [];
+                }
+              })
+            ).then(async (gptResponses) => {
+              console.log("🤓 Summarizing...");
+              const resolvedResponses = gptResponses.map((response) => {
+                if (
+                  response.status === "fulfilled" &&
+                  response.value.dropped === false &&
+                  response.value.text.trim() !== ""
+                ) {
+                  return response.value.text;
+                }
+                return "";
+              });
+              console.log("# of responses=", resolvedResponses);
+              const finalPrompt = `Read through the following bullet points and combine them in a single answer, keeping only those that are the most relevant about ${
+                summary.text
+              }:\n"""${resolvedResponses.join("\n")}"""\n`;
+              // console.log(finalPrompt);
 
-            console.log("🤓 Reading...");
-            await Promise.allSettled(responsePromises).then(
-              async (responses) => {
-                const gluedResponses = responses
-                  .map((response) => {
-                    if (response.status === "fulfilled") {
-                      return response.value.text;
-                    }
-                  })
-                  .join("\n");
-                const finalrompt = `Summarize the following text and make it less repetitive:\n"""${gluedResponses}"""\n`;
-                const b = await responder.send(gluedResponses, 0);
-                await b.doneTyping;
-              }
-            );
+              const responder = new Chat(Responder);
+              const b = await responder.send(finalPrompt, 0);
+              await b.doneTyping;
+            });
             // FIXME: in some occasions the token limit is exceeded and the error response is not handled
           });
         } else {

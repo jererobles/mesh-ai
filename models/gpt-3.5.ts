@@ -64,4 +64,8 @@ export default class Chat {
       .filter((m) => m.role === Role.assistant)
       .map((m) => m.content);
   }
+
+  clearHistory() {
+    this.history = [];
+  }
 }

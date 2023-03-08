@@ -6,7 +6,7 @@
 import { Role } from "../models/types.js";
 import Persona from "./types.js";
 
-const Responder: Persona = {
+const UserAgent: Persona = {
   seed: [
     {
       role: Role.system,
@@ -17,6 +17,9 @@ const Responder: Persona = {
       content: "How can I help you today?\n",
     },
   ],
+
+  // check that the answer does not start with "I'm sorry, "
+  validator: (input: string) => input.startsWith("I'm sorry, ") === false,
 
   gptParams: {
     max_tokens: 2048,
@@ -29,4 +32,4 @@ const Responder: Persona = {
   },
 };
 
-export default Responder;
+export default UserAgent;
