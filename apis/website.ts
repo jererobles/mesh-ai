@@ -42,13 +42,18 @@ export default class Website {
         const html = await response.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(html);
-        const [body, main, article] = [
+        const [body, main, mainContent, article] = [
           doc.getElementsByTagName("body"),
           doc.getElementsByTagName("main"),
+          doc.getElementsByAttribute("role", "main"),
           doc.getElementsByTagName("article"),
         ];
         const el =
-          (article && article[0]) || (main && main[0]) || (body && body[0]);
+          (article && article[0]) ||
+          (main && main[0]) ||
+          (mainContent && mainContent[0]) ||
+          (body && body[0]);
+        // console.log(`website ${url}, using ${el?.nodeName} as content`);
         const target = el ? el.innerHTML : html;
         const results = this.nhm.translate(target);
         resolve({
