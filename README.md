@@ -28,7 +28,10 @@ Answer
 🔗 Found 10 sources
 📖 Reading...
 🤓 Summarizing...
-💬 As of the time of writing, Tesla's stock price on NASDAQ is 185.30 USD, which is a decrease of 2.41 USD or 1.28% from the previous close. The market capitalization of Tesla is 593.934B USD, with 33.16B shares outstanding. The EPS (TTM) is 3.62 USD USD, P/E (TTTTM) is 51.78, and Fwd P/E (NTM) is 47.35. The EBITDA (TTM) is 17.375B USD, and the revenue (TTM) is 81.462B USD.
+💬 As of the close of trading on March 8th, 2023, Tesla Inc's (TSLA) stock price was 177.91 USD [1], which represents a decrease of -4.09 (-2.25%) from the previous trading day's close. The 52-week range for the stock is 101.81 - 384384.29 USD USD. The market capitalization of Tesla Inc is 575.867B USD, with 3.16B shares outstanding. The YTD % change for the stock is 47.75%. The P/E (TTM) ratio for the stock is 50.21, and the Fwd P/E (NTM) ratio is 45.91.. The EPS (TTM) for the stock is 3.62.
+
+📚 Sources used:
+ 1. https://www.cnbc.com/quotes/TSLA
 ```
 
 ## Usage
