@@ -18,8 +18,17 @@ const UserAgent: Agent = {
     },
   ],
 
-  // check that the answer does not start with "I'm sorry, "
-  validator: (input: string) => input.startsWith("I'm sorry, ") === false,
+  // check that the answer does not start with "I'm sorry, " or "I don't know" or "I don't understand" or "I don't have an answer for that" or "I apologize, "
+  validator: (input: string) => {
+    const lowerCaseInput = input.toLowerCase();
+    return (
+      !lowerCaseInput.startsWith("i'm sorry, ") &&
+      !lowerCaseInput.startsWith("i don't know") &&
+      !lowerCaseInput.startsWith("i don't understand") &&
+      !lowerCaseInput.startsWith("i don't have an answer for that") &&
+      !lowerCaseInput.startsWith("i apologize, ")
+    );
+  },
 
   gptParams: {
     max_tokens: 2048,

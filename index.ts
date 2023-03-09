@@ -58,31 +58,47 @@ const main = async () => {
                   const websiteMarkdown = websiteResultPromise.value.content;
                   const webPrompt = `Use the following text to tell me about ${summary.text}:\n"""${websiteMarkdown}"""\nDo not use your prior knowledge to answer, if you can't answer with the text I provided simply return an empty string.\n`;
                   const responder = new Chat(UserAgent);
-                  return responder.send(webPrompt, -1);
+                  return responder.send(
+                    webPrompt,
+                    -1,
+                    websiteResultPromise.value.url
+                  );
                 } else {
                   return [];
                 }
               })
             ).then(async (gptResponses) => {
               console.log("🤓 Summarizing...");
-              const resolvedResponses = gptResponses.map((response) => {
-                if (
-                  response.status === "fulfilled" &&
-                  response.value.dropped === false &&
-                  response.value.text.trim() !== ""
-                ) {
-                  return response.value.text;
-                }
-                return "";
-              });
 
-              const finalPrompt = `Read through the following bullet points and combine them in a single answer, keeping only those that are the most relevant about ${
+              const usedSources: string[] = [];
+
+              const resolvedResponses = gptResponses.reduce(
+                (acc, response) => {
+                  if (
+                    response.status === "fulfilled" &&
+                    response.value.dropped === false &&
+                    response.value.text.trim() !== ""
+                  ) {
+                    usedSources.push(response.value.metadata || ""); // this is the url of the website that was used to answer the question
+                    acc.push(`${acc.length}. ${response.value.text}`);
+                  }
+                  return acc;
+                },
+                [""]
+              );
+
+              const finalPrompt = `Read through the following numbered list and combine the items in a single answer, keeping the item number embedded within the part of the answer it is relevant to. The item number should be in the format of '[number]'. Do not start a line with the item number. ${
                 summary.text
               }:\n"""${resolvedResponses.join("\n")}"""\n`;
 
               const responder = new Chat(Responder);
               const b = await responder.send(finalPrompt, 0);
               await b.doneTyping;
+
+              console.log(
+                "\n📚 Sources used:\n",
+                usedSources.map((url, i) => `${i + 1}. ${url}`).join("\n  ")
+              );
             });
             // FIXME: in some occasions the token limit is exceeded and the error response is not handled
           });

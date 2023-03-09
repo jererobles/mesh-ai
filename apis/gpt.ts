@@ -6,6 +6,7 @@ import { printDelayed } from "../other/printDelayed.js";
 
 // promise type holding the full text from the response and another promise that resolves when the response is done printing
 export type GptResponse = {
+  metadata: string | undefined;
   text: string;
   dropped: boolean;
   doneTyping: Promise<void>;

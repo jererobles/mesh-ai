@@ -14,7 +14,7 @@ export default class Chat {
     this.truncateHistoryLength = truncateHistoryLength;
   }
 
-  async send(prompt: string, printDelay?: number) {
+  async send(prompt: string, printDelay?: number, metadata?: string) {
     const body = {
       ...this.agent.gptParams,
       messages: [
@@ -28,6 +28,7 @@ export default class Chat {
     };
 
     const chat = await gpt(body, printDelay);
+    chat.metadata = metadata;
     if (this.agent.transformer) {
       chat.text = this.agent.transformer(chat.text);
     }

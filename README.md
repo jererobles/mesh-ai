@@ -1,6 +1,6 @@
 # The New ~Bing~ Everything
 
-A simple implementation of the ChatGPT API in an attempt to replicate the "new Bing" in an extensible manner.
+A simple implementation of the ChatGPT API in an attempt to replicate the "new Bing" in an open source and (hopefully) extensible way.
 
 Read the [blogpost here](https://blog.jererobles.me/b/6F9D6A3A-A8A7-4E47-8CDB-1FFD0C3A1D85/The-new-everything).
 
@@ -85,6 +85,7 @@ Representing a model from OpenAI — an API key is required to use it but this m
   - [ ] nested Promises
   - [ ] unhandled empty responses (due to exceeded token length, network failure, etc.)
 - features
+  - [x] cite references
   - [ ] automatically trim history/prompts to fit token length
   - [ ] support more search engines such as DDG
   - [ ] image and video search
