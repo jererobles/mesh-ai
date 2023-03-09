@@ -79,6 +79,7 @@ Representing a model from OpenAI — an API key is required to use it but this m
 - code needs more time than I can dedicate in a weekend meaning lots of parts need to be refactored
 - although Agents support _some_ limited logic using the functions mentioned above, **the intention is to craft the seed messages in order to produce the desired output** — with the one exception of the "final" response which may contain special keywords injected in the response that the stream parser can pick up on in order to decide if a web search is required
 - sometimes the model's limitations leak through for example in the demo video the identified topic refers to a strike that happened in 2021 even though the model correctly identified that it lacked recent enough data to reply and therefore chose to do a web search — which correctly provided information about the ongoing strike in 2023
+- as of now the single starting point for every query the Agent does not know an answer to is a search engine – this is fine in 90%+ of the cases but imagine what it would look like if the Agent(s) could decide where to start looking from and (iteratively) find better answers to the prompt, eg. by making further search queries or following links (whatever happened to sitemaps?)
 
 ## To Do
 
