@@ -12,6 +12,25 @@ Artwork by Dall-E with prompt `AI-powered search engine, abstract`
 
 https://user-images.githubusercontent.com/9132875/222984291-b5baa390-158f-4770-ae57-7d80b7f49df5.mp4
 
+## Example interaction
+
+Prompt
+
+```
+what is latest tesla stock price?
+```
+
+Answer
+
+```
+✅ Topic: Financial market trends and updates.
+🔍 Searching the web for: Tesla stock price.
+🔗 Found 10 sources
+📖 Reading...
+🤓 Summarizing...
+💬 As of the time of writing, Tesla's stock price on NASDAQ is 185.30 USD, which is a decrease of 2.41 USD or 1.28% from the previous close. The market capitalization of Tesla is 593.934B USD, with 33.16B shares outstanding. The EPS (TTM) is 3.62 USD USD, P/E (TTTTM) is 51.78, and Fwd P/E (NTM) is 47.35. The EBITDA (TTM) is 17.375B USD, and the revenue (TTM) is 81.462B USD.
+```
+
 ## Usage
 
 Set your OpenAI API Key in `.env`
