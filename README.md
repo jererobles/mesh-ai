@@ -90,6 +90,7 @@ Representing a model from OpenAI — an API key is required to use it but this m
   - [ ] unhandled empty responses (due to exceeded token length, network failure, etc.)
 - features
   - [x] cite references
+  - [ ] use fine-tuning API (though atm not supported by the `turbo` model)
   - [ ] automatically trim history/prompts to fit token length
   - [ ] support more search engines such as DDG
   - [ ] image and video search
