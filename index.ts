@@ -1,22 +1,22 @@
 import Chat, { SEARCH_CUE } from "./models/gpt-3.5.js";
 
 import { searchGoogle } from "./apis/google.js";
-import WebsiteToMarkdown, { WebsiteResult } from "./apis/website.js";
+import WebsiteToMarkdown from "./apis/website.js";
 
-import Summarizer from "./personas/Summarizer.js";
-import Categorizer from "./personas/Categorizer.js";
-import Analyzer from "./personas/Analyzer.js";
-import Responder from "./personas/Responder.js";
-import UserAgent from "./personas/UserAgent.js";
+import Summarizer from "./agents/Summarizer.js";
+import Categorizer from "./agents/Categorizer.js";
+import Analyzer from "./agents/Analyzer.js";
+import Responder from "./agents/Responder.js";
+import UserAgent from "./agents/UserAgent.js";
 
 /**
  * The main function of the program, there are countless edge cases that are not handled :P
+ * FIXME: multiple nested promises are hard to read, refactor this into a more readable format
  */
 const main = async () => {
   const categorizer = new Chat(Categorizer); // not really used, just for show
   const summarizer = new Chat(Summarizer);
   const analyzer = new Chat(Analyzer);
-  // const responder = new Chat(Responder);
 
   const webToMd = new WebsiteToMarkdown();
 
@@ -75,11 +75,10 @@ const main = async () => {
                 }
                 return "";
               });
-              console.log("# of responses=", resolvedResponses);
+
               const finalPrompt = `Read through the following bullet points and combine them in a single answer, keeping only those that are the most relevant about ${
                 summary.text
               }:\n"""${resolvedResponses.join("\n")}"""\n`;
-              // console.log(finalPrompt);
 
               const responder = new Chat(Responder);
               const b = await responder.send(finalPrompt, 0);

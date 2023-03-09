@@ -1,24 +1,24 @@
 import gpt from "../apis/gpt.js";
-import Persona from "../personas/types.js";
+import Agent from "../agents/types.js";
 import { History, Role } from "./types.js";
 
 export const SEARCH_CUE = "##BAZINGA##";
 
 export default class Chat {
   private history: History = [];
-  private persona: Persona;
+  private agent: Agent;
   private truncateHistoryLength: number;
 
-  constructor(persona: Persona, truncateHistoryLength = 0) {
-    this.persona = persona;
+  constructor(agent: Agent, truncateHistoryLength = 0) {
+    this.agent = agent;
     this.truncateHistoryLength = truncateHistoryLength;
   }
 
   async send(prompt: string, printDelay?: number) {
     const body = {
-      ...this.persona.gptParams,
+      ...this.agent.gptParams,
       messages: [
-        ...this.persona.seed,
+        ...this.agent.seed,
         ...this.history,
         {
           role: Role.user,
@@ -28,10 +28,10 @@ export default class Chat {
     };
 
     const chat = await gpt(body, printDelay);
-    if (this.persona.transformer) {
-      chat.text = this.persona.transformer(chat.text);
+    if (this.agent.transformer) {
+      chat.text = this.agent.transformer(chat.text);
     }
-    if (this.persona.validator && !this.persona.validator(chat.text, prompt)) {
+    if (this.agent.validator && !this.agent.validator(chat.text, prompt)) {
       chat.dropped = true;
       return chat;
     }

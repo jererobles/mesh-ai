@@ -38,11 +38,11 @@ bun index.ts
 
 This section is a WIP.
 
-### Persona
+### Agent
 
 Just like no single human has the knowledge or is trained to do every task, it is unreasonable to expect one model with a fixed set of parameters to handle every user input.
 
-A Persona is just an instance of GPT3.5 with a predefined set of parameters and more importantly, a conversation seed that defines the capabilities and personality of the agent. It is also possible, although optional, to pass a `transformer` function and a `validation` function. See [other/personas.ts](https://github.com/jererobles/mesh-ai/blob/main/other/personas.ts) for more information.
+An Agent is just an instance of GPT3.5 with a predefined set of parameters and more importantly, a conversation seed that defines the capabilities and personality of the agent. It is also possible, although optional, to pass a `transformer` function and a `validation` function. See [agents/types.ts](https://github.com/jererobles/mesh-ai/blob/main/agents/types.ts) for more information.
 
 ### API
 
@@ -55,18 +55,23 @@ Representing a model from OpenAI — an API key is required to use it but this m
 ## Caveats
 
 - code needs more time than I can dedicate in a weekend meaning lots of parts need to be refactored
-- although Personas support _some_ limited logic using the functions mentioned above, **the intention is to craft the seed messages in order to produce the desired output** — with the one exception of the "final" response which may contain special keywords injected in the response that the stream parser can pick up on in order to decide if a web search is required
+- although Agents support _some_ limited logic using the functions mentioned above, **the intention is to craft the seed messages in order to produce the desired output** — with the one exception of the "final" response which may contain special keywords injected in the response that the stream parser can pick up on in order to decide if a web search is required
 - sometimes the model's limitations leak through for example in the demo video the identified topic refers to a strike that happened in 2021 even though the model correctly identified that it lacked recent enough data to reply and therefore chose to do a web search — which correctly provided information about the ongoing strike in 2023
 
 ## To Do
 
 - [x] initial PoC
 - [x] silly blog post
-- [ ] refactoring (??)
-- [ ] support more search engines such as DDG
-- [ ] image and video search
-- [ ] define more Personas
-  - [ ] map Personas to topics to answer in different voices or further refine results
+- refactor
+  - [ ] nested Promises
+  - [ ] unhandled empty responses (due to exceeded token length, network failure, etc.)
+- features
+  - [ ] automatically trim history/prompts to fit token length
+  - [ ] support more search engines such as DDG
+  - [ ] image and video search
+  - [ ] define more Agents
+    - [ ] map Agents to topics to answer in different voices or further refine results
+    - [ ] centralized service to create and 'train' own agents
 
 ---
 

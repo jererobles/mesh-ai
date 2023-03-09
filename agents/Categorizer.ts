@@ -1,12 +1,12 @@
 /**
- * Categorizer Persona likes to find the common theme between a given set of inputs.
+ * Categorizer Agent likes to find the common theme between a given set of inputs.
  * It helps profile users by finding the common topics they are interested in.
  */
 
 import { Role } from "../models/types.js";
-import Persona from "./types.js";
+import Agent from "./types.js";
 
-const Categorizer: Persona = {
+const Categorizer: Agent = {
   seed: [
     {
       role: Role.system,

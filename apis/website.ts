@@ -11,6 +11,7 @@ export type WebsiteResult = {
 };
 
 export default class Website {
+  // FIXME: there is still a lot of noise in the output
   private nhm = new NodeHtmlMarkdown(
     {},
     {
@@ -55,7 +56,9 @@ export default class Website {
           (body && body[0]);
         // console.log(`website ${url}, using ${el?.nodeName} as content`);
         const target = el ? el.innerHTML : html;
+        // console.log(`raw html: ${target}`);
         const results = this.nhm.translate(target);
+        // console.log(`markdown: ${results}`);
         resolve({
           url,
           content: results,

@@ -1,6 +1,6 @@
 import { History, GptParams } from "../models/types.js";
 
-export type Persona = {
+export type Agent = {
   /**
    * seed messages to start the conversation, this is excluded from the history
    */
@@ -28,4 +28,4 @@ export type Persona = {
   validator?: (answer: string, prompt: string) => boolean;
 };
 
-export default Persona;
+export default Agent;

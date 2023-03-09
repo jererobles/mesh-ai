@@ -1,12 +1,12 @@
 /**
- * Searcher Persona likes to find the most relevant sources for a given input.
+ * Searcher Agent likes to find the most relevant sources for a given input.
  * Its output is a search query that can be used to find the most relevant sources.
  */
 
 import { Role } from "../models/types.js";
-import Persona from "./types.js";
+import Agent from "./types.js";
 
-const Searcher: Persona = {
+const Searcher: Agent = {
   seed: [
     {
       role: Role.system,

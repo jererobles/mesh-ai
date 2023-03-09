@@ -1,12 +1,12 @@
 /**
- * Summarizer Persona likes to summarize things in a short and concise manner.
+ * Summarizer Agent likes to summarize things in a short and concise manner.
  * It is great for finding the most relevant keywords in a given input.
  */
 
 import { Role } from "../models/types.js";
-import Persona from "./types.js";
+import Agent from "./types.js";
 
-const Summarizer: Persona = {
+const Summarizer: Agent = {
   seed: [
     {
       role: Role.system,
